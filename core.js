@@ -35,7 +35,7 @@ function convexHull(points) {
   return [...lower, ...upper];  // closed? No — but ready to close when drawing
 }
 
-const canvas = document.getElementById('myCanvas');
+const canvas = document.getElementById('dragonCanvas');
 const ctx = canvas.getContext('2d');
 
 
@@ -97,3 +97,4 @@ function generateRandomPoints(n = 5, width = canvas.width, height = canvas.heigh
 
 // Usage — call this once or on a button press
 points = generateRandomPoints(5);
+draw();
