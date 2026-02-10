@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dragon Circle Demo</title>
+    <style>
+        :root {
+            --color-black: #000000;
+            --color-white: #ffffff;
+            --color-orange: #ff6600;
+            --color-red: #ff0000;
+            --color-dark-orange: #cc5200;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            height: 100%;
+            overflow: hidden;
+            background-color: var(--color-black);
+            color: var(--color-white);
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            background: linear-gradient(to right, var(--color-red), var(--color-orange), var(--color-dark-orange));
+            padding: 1rem;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 1.5rem;
+            color: var(--color-white);
+        }
+
+        main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .canvas-container {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        canvas {
+            border: 2px solid var(--color-orange);
+            max-width: 100%;
+            max-height: 100%;
+        }
+
+        .debug-output {
+            display: none;
+        }
+
+        footer {
+            background-color: var(--color-black);
+            border-top: 2px solid var(--color-orange);
+            padding: 0.5rem;
+            text-align: center;
+            font-size: 0.875rem;
+        }
+
+        /* Desktop layout - two columns */
+        @media (min-width: 768px) {
+            main {
+                flex-direction: row;
+            }
+
+            .canvas-container {
+                flex: 0 0 auto;
+                padding: 1rem;
+            }
+
+            canvas {
+                width: 800px;
+                height: 800px;
+            }
+
+            .debug-output {
+                display: block;
+                flex: 1;
+                background-color: #1a1a1a;
+                border-left: 2px solid var(--color-orange);
+                padding: 1rem;
+                overflow-y: auto;
+            }
+
+            .debug-output h2 {
+                color: var(--color-orange);
+                margin-bottom: 1rem;
+                font-size: 1.25rem;
+            }
+
+            .debug-output pre {
+                color: var(--color-white);
+                font-family: 'Courier New', monospace;
+                font-size: 0.875rem;
+                line-height: 1.5;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Dragon Circle Demo</h1>
+    </header>
+
+    <main>
+        <div class="canvas-container">
+            <canvas id="dragonCanvas" width="400" height="400"></canvas>
+        </div>
+
+        <aside class="debug-output">
+            <h2>Debug Output</h2>
+            <pre id="debugLog">Dragon Circle initialized...
+Awaiting animations...</pre>
+        </aside>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Dragon Circle Demo | Fire & Fury</p>
+    </footer>
+
+    <script>
+        // Initialize canvas
+        const canvas = document.getElementById('dragonCanvas');
+        const ctx = canvas.getContext('2d');
+        const debugLog = document.getElementById('debugLog');
+
+        // Simple circle animation
+        let angle = 0;
+        
+        function drawDragonCircle() {
+            // Clear canvas
+            ctx.fillStyle = '#000000';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Draw rotating circle
+            const centerX = canvas.width / 2;
+            const centerY = canvas.height / 2;
+            const radius = Math.min(canvas.width, canvas.height) / 3;
+
+            // Outer circle
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
+            ctx.strokeStyle = '#ff6600';
+            ctx.lineWidth = 3;
+            ctx.stroke();
+
+            // Rotating point
+            const pointX = centerX + Math.cos(angle) * radius;
+            const pointY = centerY + Math.sin(angle) * radius;
+            
+            ctx.beginPath();
+            ctx.arc(pointX, pointY, 10, 0, Math.PI * 2);
+            ctx.fillStyle = '#ff0000';
+            ctx.fill();
+
+            angle += 0.02;
+
+            // Update debug log occasionally
+            if (Math.floor(angle * 10) % 10 === 0) {
+                const timestamp = new Date().toLocaleTimeString();
+                debugLog.textContent = `Dragon Circle initialized...\nAwaiting animations...\n\nLast update: ${timestamp}\nAngle: ${angle.toFixed(2)} radians\nPosition: (${pointX.toFixed(0)}, ${pointY.toFixed(0)})`;
+            }
+
+            requestAnimationFrame(drawDragonCircle);
+        }
+
+        // Start animation
+        drawDragonCircle();
+    </script>
+</body>
+</html>
